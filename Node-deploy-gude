@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js App for Azure Container Instance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0078d4;
+            --secondary: #505a64;
+            --accent: #ffb900;
+            --light-bg: #f8f9fa;
+            --dark-bg: #212529;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+            padding-top: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, #106ebe 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .code-container {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        
+        .code-header {
+            background-color: #1a1a1a;
+            padding: 0.5rem 1rem;
+            margin: -1.5rem -1.5rem 1rem -1.5rem;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .copy-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+        
+        .copy-btn:hover {
+            background-color: #106ebe;
+        }
+        
+        .step-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .step-header {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            padding: 1rem 1.5rem;
+        }
+        
+        .step-body {
+            padding: 1.5rem;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 2.5rem;
+            margin-right: 1rem;
+            font-weight: bold;
+        }
+        
+        .diagram {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+        
+        .placeholder-diagram {
+            background: linear-gradient(45deg, #e6f7ff, #cce5ff);
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .test-area {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            margin: 1.5rem 0;
+        }
+        
+        .test-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .test-btn:hover {
+            background-color: #106ebe;
+        }
+        
+        .footer {
+            background-color: var(--dark-bg);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header text-center">
+            <h1><i class="fab fa-microsoft me-2"></i>Node.js App for Azure Container Instance</h1>
+            <p class="lead">Your Express.js application ready for deployment to Azure</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card step-card">
+                    <div class="step-header">
+                        <i class="fas fa-code me-2"></i>Your Node.js/Express Application Code
+                    </div>
+                    <div class="step-body">
+                        <p>This is the code you provided. It creates a simple Express server that responds to HTTP requests.</p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span>app.js</span>
+                                <button class="copy-btn" onclick="copyCode()">
+                                    <i class="fas fa-copy me-1"></i>Copy Code
+                                </button>
+                            </div>
+                            <pre><code>const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello from Azure Container Instance!');
+  res.send('Hello from Azure Container Instance! To Test Trigger');
+});
+
+app.listen(port, () => {
+  console.log(`App running at http://localhost:${port}`);
+});</code></pre>
+                        </div>
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Issue Detected:</strong> Your code has two <code>res.send()</code> statements in the same route handler. 
+                            The second one will never execute because <code>res.send()</code> ends the response. You should remove one of them.
+                        </div>
+                        
+                        <div class="test-area">
+                            <h4>Test the Application</h4>
+                            <p>Click the button below to simulate a request to your Express app:</p>
+                            <button class="test-btn" onclick="testApp()">
+                                <i class="fas fa-play-circle me-1"></i>Test Application
+                            </button>
+                            <div id="test-result" class="mt-3 p-3 bg-light rounded d-none">
+                                <h5>Response:</h5>
+                                <pre id="response-output" class="mb-0"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card step-card">
+                    <div class="step-header">
+                        <i class="fas fa-wrench me-2"></i>Fix the Code Issue
+                    </div>
+                    <div class="step-body">
+                        <p>Here's the corrected version of your code:</p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span>app.js (corrected)</span>
+                                <button class="copy-btn" onclick="copyCorrectedCode()">
+                                    <i class="fas fa-copy me-1"></i>Copy Code
+                                </button>
+                            </div>
+                            <pre><code>const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello from Azure Container Instance! To Test Trigger');
+});
+
+app.listen(port, () => {
+  console.log(`App running at http://localhost:${port}`);
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card step-card">
+                    <div class="step-header">
+                        <i class="fas fa-cube me-2"></i>Dockerize Your Application
+                    </div>
+                    <div class="step-body">
+                        <p>To deploy to Azure Container Instance, you need to create a Dockerfile:</p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span>Dockerfile</span>
+                                <button class="copy-btn" onclick="copyDockerfile()">
+                                    <i class="fas fa-copy me-1"></i>Copy Code
+                                </button>
+                            </div>
+                            <pre><code># Use an official Node runtime as the base image
+FROM node:14-alpine
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the port the app runs on
+EXPOSE 3000
+
+# Define the command to run the app
+CMD ["node", "app.js"]</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card step-card">
+                    <div class="step-header">
+                        <i class="fas fa-cloud-upload-alt me-2"></i>Deploy to Azure Container Instance
+                    </div>
+                    <div class="step-body">
+                        <p>Once you have Dockerized your application, you can deploy it to Azure Container Instances using the Azure CLI:</p>
+                        
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span>Azure CLI Commands</span>
+                                <button class="copy-btn" onclick="copyAzureCommands()">
+                                    <i class="fas fa-copy me-1"></i>Copy Commands
+                                </button>
+                            </div>
+                            <pre><code># Log in to Azure
+az login
+
+# Create a resource group
+az group create --name myResourceGroup --location eastus
+
+# Create a container instance
+az container create \
+  --resource-group myResourceGroup \
+  --name my-node-app \
+  --image your-docker-image-name \
+  --dns-name-label my-node-app-dns \
+  --ports 3000</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>Node.js Application Deployment Guide for Azure Container Instances</p>
+            <p class="mb-0">© 2023 Azure Containers Demo</p>
+        </div>
+    </footer>
+
+    <script>
+        function copyCode() {
+            const code = `const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello from Azure Container Instance!');
+  res.send('Hello from Azure Container Instance! To Test Trigger');
+});
+
+app.listen(port, () => {
+  console.log(\`App running at http://localhost:\${port}\`);
+});`;
+            copyToClipboard(code);
+            alert('Code copied to clipboard!');
+        }
+        
+        function copyCorrectedCode() {
+            const code = `const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello from Azure Container Instance! To Test Trigger');
+});
+
+app.listen(port, () => {
+  console.log(\`App running at http://localhost:\${port}\`);
+});`;
+            copyToClipboard(code);
+            alert('Corrected code copied to clipboard!');
+        }
+        
+        function copyDockerfile() {
+            const code = `# Use an official Node runtime as the base image
+FROM node:14-alpine
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the port the app runs on
+EXPOSE 3000
+
+# Define the command to run the app
+CMD ["node", "app.js"]`;
+            copyToClipboard(code);
+            alert('Dockerfile copied to clipboard!');
+        }
+        
+        function copyAzureCommands() {
+            const code = `# Log in to Azure
+az login
+
+# Create a resource group
+az group create --name myResourceGroup --location eastus
+
+# Create a container instance
+az container create \\
+  --resource-group myResourceGroup \\
+  --name my-node-app \\
+  --image your-docker-image-name \\
+  --dns-name-label my-node-app-dns \\
+  --ports 3000`;
+            copyToClipboard(code);
+            alert('Azure commands copied to clipboard!');
+        }
+        
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+        
+        function testApp() {
+            const resultDiv = document.getElementById('test-result');
+            const output = document.getElementById('response-output');
+            
+            resultDiv.classList.remove('d-none');
+            
+            // Simulate the behavior of the original code
+            output.textContent = 'Hello from Azure Container Instance!';
+            
+            // Note: In the original code, the second res.send() would never be reached
+            // so we're only showing the first response
+        }
+    </script>
+</body>
+</html>
